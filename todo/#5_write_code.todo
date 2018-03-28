@@ -1,5 +1,5 @@
 ✔ #5.0 Add test environment @done
-☐ #5.1 "include-mocha.js" should define the global var "includeMocha".
+✔ #5.1 "include-mocha.js" should define the global var "includeMocha". @done
 ☐ #5.2 includeMocha( option )
   ☐ #5.2.0 Should return an "Error" object if pass an invalid option.
     ☐ #5.2.0.0 "option" should be a string, a string array, an object or "undefined".
