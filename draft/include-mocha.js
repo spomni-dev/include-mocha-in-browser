@@ -404,7 +404,7 @@ if ( includeMocha === undefined ){
     includeMocha.onScriptReloaded = function(){
     
       var option = window.includeMocha.option;
-    
+
       // Setup mocha
         window.mocha.setup( option.mochaSetup );
       // define window.assert

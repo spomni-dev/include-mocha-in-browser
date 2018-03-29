@@ -24,7 +24,7 @@ if (window.includeMocha === undefined){ // the first load
 
     /** Create a function for the easy setup of the test environment.
      * @returns {IncludeMochaInstance}
-     * @constructor
+     * @constructor IncludeMocha
      * @hideconstructor
      */
     function IncludeMocha(){
@@ -137,13 +137,26 @@ if (window.includeMocha === undefined){ // the first load
            * @memberof IncludeMocha
           */
             self._option = {
-              'libRoot':   option.libRoot   || 'lib/',
-              'mochaPath': option.mochaPath || 'mocha.js'
+              'libRoot':    option.libRoot    || 'lib/',
+              'mochaPath':  option.mochaPath  || 'mocha.js',
+              'mochaSetup': option.mochaSetup || 'bdd'
             };
           //
-          //-- include "mocha.js"
-            self._includeScript( self._option.libRoot + self._option.mochaPath );
+          /** @member {array} includedNodes - Array of the html nodes that have been included on current stage.
+           * @private
+           * @inner
+           * @memberof IncludeMocha
+           */
+            var includedNodes = [];
           //
+          includedNodes.push( self._includeScript( self._option.libRoot + self._option.mochaPath ) );
+          
+          //-- The second stage starts
+          self._onNodesLoaded( includedNodes, function(){
+            mocha.setup( self._option.mochaSetup );
+          });
+         
+          
           return undefined;
         }; //-- self
       //
@@ -168,6 +181,30 @@ if (window.includeMocha === undefined){ // the first load
       script.setAttribute('src', src);
       script.setAttribute('defer', true);
       document.head.appendChild(script);
+      return script;
+    };
+    
+    IncludeMocha.prototype._onNodesLoaded = function( includedNodes, callback ){
+
+      var loadedNodesCounter = {
+        _nodesCount : includedNodes.length,
+        _loadedNodesCount : 0,
+        nodeLoaded : function(){
+          this._loadedNodesCount++;
+          if (this._loadedNodesCount == this._loadedNodesCount){
+            callback();
+          };
+        }
+      }
+
+      for (var i=0; i<includedNodes.length; i++){
+        includedNodes[i].addEventListener('load', function(){
+          loadedNodesCounter.nodeLoaded();
+        });
+        includedNodes[i].addEventListener('error', function(){
+          loadedNodesCounter.nodeLoaded();
+        });
+      };
     };
 
     /** @var {IncludeMochaInstance} includeMocha - Загрузить и настроить тестовое окружение. Запустить выполнение тестов. */

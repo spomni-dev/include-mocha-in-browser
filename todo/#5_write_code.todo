@@ -19,3 +19,8 @@
     ✔ #5.2.1.2 Should include a script from the source "option.libRoot + 'mocha.js'" if the option "option.libRoot" is string and "option.mochaPath" is undefined. @done (2018-3-29 12:29:42)
     ✔ #5.2.1.3 Should include a script from the source "option.libRoot + option.mochaPath" if the options "option.libRoot" and "option.mochaPath" are defined. @done (2018-3-29 12:32:52)
     ✔ #5.2.1.4 Should define the global var "mocha" as an instanse of the module "mocha.js". @done (2018-3-29 13:55:29)
+    
+  ✔ #5.2.2 Should setup the module "mocha.js". @done
+    ✔ #5.2.2.0 Should call the function "window.mocha.setup('bdd')"  if the option "option.mochaSetup" is undefined. @done
+    ✔ #5.2.2.1 Should call the function "window.mocha.setup( option.mochaSetup )" if the option "option.mochaSetup" is defined. @done
+  

@@ -43,8 +43,8 @@ includeMocha( option )
     Should include a script from the source "option.libRoot + option.mochaPath" if the options "option.libRoot" and "option.mochaPath" are defined.
     Should define the global var "mocha" as an instanse of the module "mocha.js".
     
-  Should setup the module "micha.js".
-    Should call the function "window.mocha.setup('bdd')"  if the option "option.mochaSetup" us undefined.
+  Should setup the module "mocha.js".
+    Should call the function "window.mocha.setup('bdd')"  if the option "option.mochaSetup" is undefined.
     Should call the function "window.mocha.setup( option.mochaSetup )" if the option "option.mochaSetup" is defined.
     
   Should run the module "mocha.js".

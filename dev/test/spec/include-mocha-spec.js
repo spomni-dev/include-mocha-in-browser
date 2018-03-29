@@ -127,6 +127,31 @@ describe('include-mocha.js', function(){
 
       return newSRCArray;
     }
+    
+    function onScriptsLoaded( newScriptNodes, callback ){
+    
+      var loadedScriptCounter = {
+        _scriptCount : newScriptNodes.length,
+        _loadedScriptCount : 0,
+        addScriptCount : function(){
+          this._loadedScriptCount++;
+          if (this._loadedScriptCount == this._scriptCount){
+            callback();
+          }
+        }
+      }
+      
+      for (var i=0; i<newScriptNodes.length; i++){
+        newScriptNodes[i].addEventListener('load', function(){
+          loadedScriptCounter.addScriptCount();
+        });
+        newScriptNodes[i].addEventListener('error', function(){
+          loadedScriptCounter.addScriptCount();
+        });
+      }
+    
+    
+    };
 
     function shouldIncludeScript( includeMochaOption, expectedSrc ) {
       var beforeScriptNodes = document.querySelectorAll('script');
@@ -351,7 +376,8 @@ describe('include-mocha.js', function(){
         );
       });
 
-      cleanIt( 'Should define the global var "mocha" as an instanse of the module "mocha.js".', function(done){
+      it( 'Should define the global var "mocha" as an instanse of the module "mocha.js".', function(done){
+        cleaner.saveState();
 
         var beforeScriptNodes = document.querySelectorAll('script');
 
@@ -359,35 +385,29 @@ describe('include-mocha.js', function(){
         assert.isUndefined(result);
 
         var newScriptNodes = getNewScriptNodes( beforeScriptNodes );
-        assert( newScriptNodes.length > 0 );
+        assert( newScriptNodes.length > 0, "The ecpected new scripts count more than 0." );
 
-        var loadedScriptCounter = {
-          _scriptCount : newScriptNodes.length,
-          _loadedScriptCount : 0,
-          addScriptCount : function(){
-            this._loadedScriptCount++;
-            if (this._loadedScriptCount == this._scriptCount){
-              assert.isDefined(window.mocha);
-              assert.strictEqual(window.mocha.name, 'Mocha');
-              cleaner.clean();
-              done();
-            }
-          }
-        }
+        onScriptsLoaded( newScriptNodes, function(){
+          assert.isDefined(window.mocha);
+          assert.strictEqual(window.mocha.name, 'Mocha');
 
-        for (var i=0; i<newScriptNodes.length; i++){
-          newScriptNodes[i].addEventListener('load', function(){
-            loadedScriptCounter.addScriptCount();
-          });
-          newScriptNodes[i].addEventListener('error', function(){
-            loadedScriptCounter.addScriptCount();
-          });
-        }
-
+          cleaner.clean();
+          done();
+        });
       });
-
-
     });
+    
+    describe( 'Should setup the module "mocha.js".', function(){
+    
+      it( 'Should call the function "window.mocha.setup(\'bdd\')" if the option "option.mochaSetup" is undefined.' );
+      
+      it( 'Should call the function "window.mocha.setup( option.mochaSetup )" if the option "option.mochaSetup" is defined.' );
+    });
+
+    
+    
+    
+    
   });
 
 });
