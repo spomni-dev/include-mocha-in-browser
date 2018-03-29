@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="include-mocha.js.html">include-mocha.js</a>, <a href="include-mocha.js.html#line4">line 4</a>
+        <a href="include-mocha.js.html">include-mocha.js</a>, <a href="include-mocha.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -159,10 +159,86 @@
 
         
             
+<h4 class="name" id="_option"><span class="type-signature">(private) </span>_option<span class="type-signature"> :<a href="IncludeMocha.html#_option">IncludeMocha#_option</a></span></h4>
+
+
+
+
+<div class="description">
+    Список опций, используемых экземпляром класса.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="IncludeMocha.html#_option">IncludeMocha#_option</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="include-mocha.js.html">include-mocha.js</a>, <a href="include-mocha.js.html#line135">line 135</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="~self"><span class="type-signature">(private, inner) </span>self<span class="type-signature"> :<a href="global.html#IncludeMochaInstance">IncludeMochaInstance</a></span></h4>
 
 
 
+
+<div class="description">
+    Экземпляр класса.
+</div>
 
 
 
@@ -229,7 +305,564 @@
     
 
     
+        <h3 class="subsection-title">Methods</h3>
 
+        
+            
+
+    
+
+    
+    <h4 class="name" id="_includeScript"><span class="type-signature">(private) </span>_includeScript<span class="signature">(src)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Include script into the document from the sorce "src".
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>src</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">path to the source script.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="include-mocha.js.html">include-mocha.js</a>, <a href="include-mocha.js.html#line164">line 164</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id="_option">_option</h4>
+
+
+
+
+<div class="description">
+    Список опций, используемых экземпляром класса "IncludeMocha".
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>specRoot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    "spec/"
+                
+                </td>
+            
+
+            <td class="description last">Путь к директории файлов спецификаций. Относительно данного пути подключаются файлы спецификаций тестов.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>specPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last">Массив путей к файлам спецификаций.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scriptPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last">Массив путей к файлам тестируемых js-скриптов.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>libRoot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    "lib"
+                
+                </td>
+            
+
+            <td class="description last">Путь к директории файлов модулей. Относительно этого пути подключаются все файлы модулей, определенные свойствами "mochaPath", "chaiPath" и "selfPath".</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mochaPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    "mocha.js"
+                
+                </td>
+            
+
+            <td class="description last">Путь к файлу модуля "mocha.js".</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>chaiPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    "chai.js"
+                
+                </td>
+            
+
+            <td class="description last">Путь к файлу модуля "chai.js".</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>selfPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    "include-mocha.js"
+                
+                </td>
+            
+
+            <td class="description last">Путь к файлу данного скрипта. Необходим для работы внутренней реализации.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cssRoot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    "css/"
+                
+                </td>
+            
+
+            <td class="description last">Путь к директории css-стилей. Относительно данного пути подключаются файлы css-стилей.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cssPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    "mocha.css"
+                
+                </td>
+            
+
+            <td class="description last">Путь или массив путей к файлам css-стилей.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mochaSetup</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    "bdd"
+                
+                </td>
+            
+
+            <td class="description last">Параметры для настройки модуля "mocha.js".</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="include-mocha.js.html">include-mocha.js</a>, <a href="include-mocha.js.html#line121">line 121</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
     
 
     
@@ -249,7 +882,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Mar 27 2018 22:11:47 GMT+0300 (MSK)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Mar 28 2018 22:08:00 GMT+0300 (MSK)
 </footer>
 
 <script> prettyPrint(); </script>

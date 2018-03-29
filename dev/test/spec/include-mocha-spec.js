@@ -3,20 +3,39 @@ describe('include-mocha.js', function(){
   //-- Support vars and functions
     var assert = testAssert;
 
-    function cleanEnvironment( when ){
-
+    var cleaner = {
+      saveState : function(){
+        this.clean();
+        this._saveScriptNodes();
+      },
+      clean : function(){
+        this._removeScripts();
+        this._cleanGlobalVars()
+      },
+      _scriptNodeList : null,
+      _saveScriptNodes : function(){
+        this._scriptNodeList = document.querySelectorAll('script')
+      },
+      _removeScripts : function(){
+        var scriptNodes = document.querySelectorAll('script');
+        for (var i=0; i<scriptNodes; i++){
+          if ( !isInclude(this._scriptNodeList, scriptNodes[i]) ){
+            scriptNodes[i].parent.removeChild(scriptNodes[i]);
+            i--;
+          }
+        };
+      },
+      _cleanGlobalVars : function(){
+        delete window.mocha;
+      }
     };
 
     function cleanIt( message, callback ){
-      cleanEnvironment( 'before' );
+      cleaner.saveState();
       it( message, callback );
-      cleanEnvironment( 'after' );
+      cleaner.clean();
     };
 
-    /** Call the callback function for each standart data type. Pass an instance of the type as the option "type".
-      * @param {Function} callback( type )
-      * @returns {undefined}
-      */
     function forEachType( callback ){
 
       var typeArr = [
@@ -63,15 +82,6 @@ describe('include-mocha.js', function(){
       return false;
     };
 
-    /** Return true if the "rabbit" is an array of strings.
-     *
-     * @param {mixed} rabbit
-     *
-     * @returns {boolean}
-     *
-     * @requires isArray()
-     * @requires isString()
-     */
     function isStringArray( rabbit ) {
       if ( !isArray( rabbit ) ) return false;
 
@@ -82,6 +92,58 @@ describe('include-mocha.js', function(){
       }
 
       return true;
+    }
+
+    function isInclude( haystack, needle ){
+      if ( !haystack.length ) return false;
+      for (var i=0; i<haystack.length; i++){
+        if ( haystack[i] === needle ) return true;
+      }
+      return false;
+    }
+
+    function getNewScriptNodes( oldScriptNodes ) {
+      var afterScriptNodes = document.querySelectorAll('script');
+
+      var newScriptNodes = [];
+      for (var i=0; i<afterScriptNodes.length; i++){
+        if ( !isInclude( oldScriptNodes, afterScriptNodes[i] ) ){
+          newScriptNodes.push( afterScriptNodes[i] );
+        }
+      }
+
+      return newScriptNodes;
+    }
+
+    function getNewSRCArray( oldScriptNodes ){
+      var newScriptNodes = document.querySelectorAll('script');
+
+      var newSRCArray = [];
+      for (var i=0; i<newScriptNodes.length; i++){
+        if ( !isInclude( oldScriptNodes, newScriptNodes[i] ) ){
+          newSRCArray.push( newScriptNodes[i].getAttribute('src') );
+        }
+      }
+
+      return newSRCArray;
+    }
+
+    function shouldIncludeScript( includeMochaOption, expectedSrc ) {
+      var beforeScriptNodes = document.querySelectorAll('script');
+
+      var result = includeMocha( includeMochaOption );
+      assert.isUndefined(result);
+
+      var newSRCArray = getNewSRCArray(beforeScriptNodes);
+      var validSrcCount = 0;
+
+      newSRCArray.forEach(function(src, i, newSRCArray){
+        if ( src === expectedSrc ){
+          validSrcCount++;
+        }
+      });
+
+      assert.strictEqual( validSrcCount, 1, "The expected count of the new valid script nodes is 1.");
     }
 
   //--
@@ -141,119 +203,188 @@ describe('include-mocha.js', function(){
 
         }));
       });
-      
+
       describe( 'option.scriptPath', function(){
-      
+
         cleanIt( 'Should be a string, a string array or "undefined".', forEachType(function(type){
-      
+
           if ( !isString(type)
             && !isStringArray(type)
             && !isUndefined(type)
             ){
-      
+
             var result = includeMocha({
               'scriptPath': type
             });
             assert.instanceOf( result, Error );
-      
+
           };
         }));
       });
-      
+
       describe( 'option.libRoot', function(){
         cleanIt( 'Should be a string or "undefined".', forEachType(function(type){
           if ( !isString(type)
             && !isUndefined(type)
             ){
-        
+
             var result = includeMocha({
               'libRoot': type
             });
             assert.instanceOf( result, Error );
-        
+
           };
         }));
       });
-      
+
       describe( 'option.mochaPath', function(){
         cleanIt( 'Should be a string or "undefined".', forEachType(function(type){
           if ( !isString(type)
             && !isUndefined(type)
             ){
-        
+
             var result = includeMocha({
               'mochaPath': type
             });
             assert.instanceOf( result, Error );
-        
+
           };
         }));
       });
-      
+
       describe( 'option.chaiPath', function(){
         cleanIt( 'Should be a string or "undefined".', forEachType(function(type){
           if ( !isString(type)
             && !isUndefined(type)
             ){
-        
+
             var result = includeMocha({
               'chaiPath': type
             });
             assert.instanceOf( result, Error );
-        
+
           };
         }));
       });
-      
+
       describe( 'option.selfPath', function(){
         cleanIt( 'Should be a string or "undefined".', forEachType(function(type){
           if ( !isString(type)
             && !isUndefined(type)
             ){
-        
+
             var result = includeMocha({
               'selfPath': type
             });
             assert.instanceOf( result, Error );
-        
+
           };
         }));
       });
-      
+
       describe( 'option.cssRoot', function(){
         cleanIt( 'Should be a string or "undefined".', forEachType(function(type){
           if ( !isString(type)
             && !isUndefined(type)
             ){
-        
+
             var result = includeMocha({
               'cssRoot': type
             });
             assert.instanceOf( result, Error );
-        
+
           };
         }));
       });
-      
+
       describe( 'option.cssPath', function(){
-      
+
         cleanIt( 'Should be a string, a string array or "undefined".', forEachType(function(type){
-      
+
           if ( !isString(type)
             && !isStringArray(type)
             && !isUndefined(type)
             ){
-      
+
             var result = includeMocha({
               'cssPath': type
             });
             assert.instanceOf( result, Error );
-      
+
           };
-      
+
         }));
       });
+    });
 
+    describe( 'Should include a module "mocha.js".', function(){
+
+      cleanIt( 'Should include a script from the source "lib/mocha.js" if the options "option.libRoot" and "option.mochaPath" are undefined.', function(){
+
+        shouldIncludeScript(
+          undefined,
+          'lib/mocha.js'
+        );
+      });
+
+      cleanIt( 'Should include a script from the source "\'lib/\' + option.mochaPath" if the option "option.libRoot" is uneefined and "option.mochaPath" is string.', function(){
+
+        shouldIncludeScript(
+          { mochaPath: 'mocha-path.js' },
+          'lib/mocha-path.js'
+        );
+      });
+
+      cleanIt( 'Should include a script from the source "option.libRoot + \'mocha.js\'" if the option "option.libRoot" is string and "option.mochaPath" is undefined.', function(){
+
+        shouldIncludeScript(
+          { libRoot: 'lib-root/' },
+          'lib-root/mocha.js'
+        );
+      });
+
+      cleanIt( 'Should include a script from the source "option.libRoot + option.mochaPath" if the options "option.libRoot" and "option.mochaPath" are defined.', function(){
+
+        shouldIncludeScript(
+          { libRoot: 'lib-root/', mochaPath: 'mocha-path.js' },
+          'lib-root/mocha-path.js'
+        );
+      });
+
+      cleanIt( 'Should define the global var "mocha" as an instanse of the module "mocha.js".', function(done){
+
+        var beforeScriptNodes = document.querySelectorAll('script');
+
+        var result = includeMocha();
+        assert.isUndefined(result);
+
+        var newScriptNodes = getNewScriptNodes( beforeScriptNodes );
+        assert( newScriptNodes.length > 0 );
+
+        var loadedScriptCounter = {
+          _scriptCount : newScriptNodes.length,
+          _loadedScriptCount : 0,
+          addScriptCount : function(){
+            this._loadedScriptCount++;
+            if (this._loadedScriptCount == this._scriptCount){
+              assert.isDefined(window.mocha);
+              assert.strictEqual(window.mocha.name, 'Mocha');
+              cleaner.clean();
+              done();
+            }
+          }
+        }
+
+        for (var i=0; i<newScriptNodes.length; i++){
+          newScriptNodes[i].addEventListener('load', function(){
+            loadedScriptCounter.addScriptCount();
+          });
+          newScriptNodes[i].addEventListener('error', function(){
+            loadedScriptCounter.addScriptCount();
+          });
+        }
+
+      });
 
 
     });

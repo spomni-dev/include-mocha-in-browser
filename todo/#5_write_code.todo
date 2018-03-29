@@ -13,9 +13,9 @@
     ✔ #5.2.0.8 "option.cssRoot" should be a string or "undefined". @done
     ✔ #5.2.0.9 "option.cssPath" should be a string, a string array or "undefined". @done
 
-  ☐ #5.2.1 Should include a module "mocha.js".
-    ☐ #5.2.1.0 Should include a script from the source "'lib/mocha.js'" if the options "option.libRoot" and "option.mochaPath" are undefined.
-    ☐ #5.2.1.1 Should include a script from the source "'lib/' + option.mochaPath" if the option "option.libRoot" is uneefined and "option.mochaPath" is string.
-    ☐ #5.2.1.2 Should include a script from the source "option.libRoot + 'mocha.js'" if the option "option.libRoot" is string and "option.mochaPath" is undefined.
-    ☐ #5.2.1.3 Should include a script from the source "option.libRoot + option.mochaPath" if the options "option.libRoot" and "option.mochaPath" are defined.
-    ☐ #5.2.1.4 Should define the global var "mocha" as an instanse of the module "mocha.js".
+  ✔ #5.2.1 Should include a module "mocha.js". @done (2018-3-29 13:57:28)
+    ✔ #5.2.1.0 Should include a script from the source "'lib/mocha.js'" if the options "option.libRoot" and "option.mochaPath" are undefined. @done
+    ✔ #5.2.1.1 Should include a script from the source "'lib/' + option.mochaPath" if the option "option.libRoot" is uneefined and "option.mochaPath" is string. @done (2018-3-29 12:26:35)
+    ✔ #5.2.1.2 Should include a script from the source "option.libRoot + 'mocha.js'" if the option "option.libRoot" is string and "option.mochaPath" is undefined. @done (2018-3-29 12:29:42)
+    ✔ #5.2.1.3 Should include a script from the source "option.libRoot + option.mochaPath" if the options "option.libRoot" and "option.mochaPath" are defined. @done (2018-3-29 12:32:52)
+    ✔ #5.2.1.4 Should define the global var "mocha" as an instanse of the module "mocha.js". @done (2018-3-29 13:55:29)

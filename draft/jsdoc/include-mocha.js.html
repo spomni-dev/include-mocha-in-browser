@@ -26,52 +26,222 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>if (window.includeMocha === undefined){ // the first load
+            <pre class="prettyprint source linenums"><code>/** @typedef {Function} IncludeMochaInstance
+ * @description Загрузить и настроить тестовое окружение. Запустить выполнение тестов. Вывести ошибку в тело документа, если невозможно загрузить любой из ресурсов.
+ *
+ * @param {string|string[]|Object} [option] - Путь или массив путей к файлам спецификаций или список опций.
+ * @param {string} [option.specRoot="spec/"] - Путь к директории файлов спецификаций. Относительно данного пути подключаются файлы спецификаций тестов.
+ * @param {string|string[]} [option.specPath=[]] - Путь либо массив путей к файлам спецификаций.
+ * @param {string|string[]} [option.scriptPath=[]] - Путь либо массив путей к файлам тестируемых js-скриптов.
+ * @param {string} [option.libRoot="lib"] - Путь к директории файлов модулей. Относительно этого пути подключаются все файлы модулей, определенные свойствами "mochaPath", "chaiPath" и "selfPath".
+ * @param {string} [option.mochaPath="mocha.js"] - Путь к файлу модуля "mocha.js".
+ * @param {string} [option.chaiPath="chai.js"] - Путь к файлу модуля "chai.js".
+ * @param {string} [option.selfPath="include-mocha.js"] - Путь к файлу данного скрипта. Необходим для работы внутренней реализации.
+ * @param {string} [option.cssRoot="css/"] - Путь к директории css-стилей. Относительно данного пути подключаются файлы css-стилей.
+ * @param {string|string[]} [option.cssPath="mocha.css"] - Путь или массив путей к файлам css-стилей.
+ * @param {string|Object} [option.mochaSetup="bdd"] - Параметры для настройки модуля "mocha.js".
+ *
+ * @returns {undefined|Error}
+ *
+ * @property {null|Runner} runner - Результат вызова "mocha.run()".
+ */
+//
+
+if (window.includeMocha === undefined){ // the first load
   (function(){
-  
+
     /** @class IncludeMocha
      * @desc Create a function for the easy setup of the test environment.
      * @returns {IncludeMochaInstance}
      */
     function IncludeMocha(){
-      
-      /** @typedef {Function} IncludeMochaInstance
-      * @description Загрузить и настроить тестовое окружение. Запустить выполнение тестов. Вывести ошибку в тело документа, если невозможно загрузить любой из ресурсов.
-      *
-      * @param {string|string[]|Object} [option] - Путь или массив путей к файлам спецификаций или список опций.
-      * @param {string} [option.specRoot="spec/"] - Путь к директории файлов спецификаций. Относительно данного пути подключаются файлы спецификаций тестов.
-      * @param {string|string[]} [option.specPath=[]] - Путь либо массив путей к файлам спецификаций.
-      * @param {string|string[]} [option.scriptPath=[]] - Путь либо массив путей к файлам тестируемых js-скриптов.
-      * @param {string} [option.libRoot="lib"] - Путь к директории файлов модулей. Относительно этого пути подключаются все файлы модулей, определенные свойствами "mochaPath", "chaiPath" и "selfPath".
-      * @param {string} [option.mochaPath="mocha.js"] - Путь к файлу модуля "mocha.js".
-      * @param {string} [option.chaiPath="chai.js"] - Путь к файлу модуля "chai.js".
-      * @param {string} [option.selfPath="include-mocha.js"] - Путь к файлу данного скрипта. Необходим для работы внутренней реализации.
-      * @param {string} [option.cssRoot="css/"] - Путь к директории css-стилей. Относительно данного пути подключаются файлы css-стилей.
-      * @param {string|string[]} [option.cssPath="mocha.css"] - Путь или массив путей к файлам css-стилей.
-      * @param {string|Object} [option.mochaSetup="bdd"] - Параметры для настройки модуля "mocha.js".
-      *
-      * @returns {undefined|Error}
-      *
-      * @property {null|Runner} runner - Результат вызова "mocha.run()".
-      */
-      //
-    
-      /** @var {IncludeMochaInstance} self
+
+      /** @var {IncludeMochaInstance} self - Экземпляр класса.
        * @private
        * @inner
        * @memberof IncludeMocha
        */
-      self = function( option ){};
-      
+      function self( option ){
+        //-- Check and init input param
+          //-- check "option"
+            if ( !isString(option)
+              &amp;&amp; !isStringArray(option)
+              &amp;&amp; !isSimpleObject(option)
+              &amp;&amp; !isUndefined(option)
+              ){
+              return new Error('The option "option" should be a string, a string array, an object or "undefined".')
+            };
+          //-- init "option"
+            if ( isString(option) ){
+              option = { "specPath": [option] };
+            } else if ( isArray(option) ){
+              option = { 'specPath': option };
+            } else if ( isUndefined(option) ){
+              option = {};
+            }
+          //-- check "option.specRoot"
+            if ( !isString( option.specRoot )
+              &amp;&amp; !isUndefined( option.specRoot )
+              ){
+              return new Error('The option "option.specRoot" should be a string or "undefined".')
+            };
+            
+          //-- check "option.specPath"
+            if ( !isString(option.specPath)
+              &amp;&amp; !isStringArray(option.specPath)
+              &amp;&amp; !isUndefined(option.specPath)
+              ){
+              return new Error('The option "option.specPath" should be a string, a string array or "undefined".')
+            };
+
+          //-- check "option.scriptPath"
+            if ( !isString(option.scriptPath)
+              &amp;&amp; !isStringArray(option.scriptPath)
+              &amp;&amp; !isUndefined(option.scriptPath)
+              ){
+              return new Error('The option "option.scriptPath" should be a string, a string array or "undefined".')
+            };
+            
+          //-- check "option.libRoot"
+            if ( !isString( option.libRoot )
+              &amp;&amp; !isUndefined( option.libRoot )
+              ){
+              return new Error('The option "option.libRoot" should be a string or "undefined".')
+            };
+            
+          //-- check "option.mochaPath"
+            if ( !isString( option.mochaPath )
+              &amp;&amp; !isUndefined( option.mochaPath )
+              ){
+              return new Error('The option "option.mochaPath" should be a string or "undefined".')
+            };
+            
+          //-- check "option.chaiPath"
+            if ( !isString( option.chaiPath )
+              &amp;&amp; !isUndefined( option.chaiPath )
+              ){
+              return new Error('The option "option.chaiPath" should be a string or "undefined".')
+            };
+            
+          //-- check "option.selfPath"
+            if ( !isString( option.selfPath )
+              &amp;&amp; !isUndefined( option.selfPath )
+              ){
+              return new Error('The option "option.selfPath" should be a string or "undefined".')
+            };
+            
+          //-- check "option.cssRoot"
+            if ( !isString( option.cssRoot )
+              &amp;&amp; !isUndefined( option.cssRoot )
+              ){
+              return new Error('The option "option.cssRoot" should be a string or "undefined".')
+            };
+            
+          //-- check "option.cssPath"
+            if ( !isString(option.cssPath)
+              &amp;&amp; !isStringArray(option.cssPath)
+              &amp;&amp; !isUndefined(option.cssPath)
+              ){
+              return new Error('The option "option.cssPath" should be a string, a string array or "undefined".')
+            };
+        //-- check options end
+        
+        /** @typedef {object} IncludeMocha#_option
+         * @desc Список опций, используемых экземпляром класса "IncludeMocha".
+         * @property {string} specRoot="spec/" - Путь к директории файлов спецификаций. Относительно данного пути подключаются файлы спецификаций тестов.
+         * @property {string[]} specPath=[]] - Массив путей к файлам спецификаций.
+         * @property {string[]} scriptPath=[]] - Массив путей к файлам тестируемых js-скриптов.
+         * @property {string} libRoot="lib" - Путь к директории файлов модулей. Относительно этого пути подключаются все файлы модулей, определенные свойствами "mochaPath", "chaiPath" и "selfPath".
+         * @property {string} mochaPath="mocha.js" - Путь к файлу модуля "mocha.js".
+         * @property {string} chaiPath="chai.js" - Путь к файлу модуля "chai.js".
+         * @property {string} selfPath="include-mocha.js" - Путь к файлу данного скрипта. Необходим для работы внутренней реализации.
+         * @property {string} cssRoot="css/" - Путь к директории css-стилей. Относительно данного пути подключаются файлы css-стилей.
+         * @property {string[]} cssPath="mocha.css"] - Путь или массив путей к файлам css-стилей.
+         * @property {string|Object} mochaSetup="bdd" - Параметры для настройки модуля "mocha.js".
+         */
+        
+        /** @member {IncludeMocha#_option} _option - Список опций, используемых экземпляром класса. 
+         * @private
+         * @instance
+         * @memberof IncludeMocha
+         */
+        self._option = {
+          'libRoot':   option.libRoot   || 'lib/',
+          'mochaPath': option.mochaPath || 'mocha.js'
+        };
+        
+        //-- include mocha.js
+          self._includeScript( self._option.libRoot + self._option.mochaPath );
+          
+      }; //-- self()
+
       self.__proto__ = IncludeMocha.prototype;
       return self;
     }
-    
     IncludeMocha.prototype = Object.create(Function.prototype);
     
+    /** Include script into the document from the sorce "src".
+     * @method
+     *
+     * @param {string} src - path to the source script.
+     *
+     * @returns {undefined}
+     * @private
+     * @memberof IncludeMocha
+     */
+    IncludeMocha.prototype._includeScript = function( src ){
+    
+    };
+
     /** @var {IncludeMochaInstance} includeMocha - Загрузить и настроить тестовое окружение. Запустить выполнение тестов. */
     window.includeMocha = new IncludeMocha();
-  
+
+    function isString( rabbit ){
+      if ( typeof( rabbit ) !== "string" ) return false;
+      return true;
+    };
+
+    function isArray( rabbit ){
+      if ( rabbit instanceof Array ) return true;
+      return false;
+    };
+
+    function isSimpleObject( rabbit ){
+      if ( typeof( rabbit ) === "object"
+        &amp;&amp; rabbit !== null
+        &amp;&amp; rabbit.__proto__ == Object.prototype
+        ){
+        return true;
+      };
+      return false;
+    };
+
+    function isUndefined( rabbit ){
+      if ( rabbit === undefined ) return true;
+      return false;
+    };
+
+    /** Return true if the "rabbit" is an array of strings.
+     *
+     * @param {mixed} rabbit
+     *
+     * @returns {boolean}
+     *
+     * @requires isArray()
+     * @requires isString()
+     */
+    function isStringArray( rabbit ) {
+      if ( !isArray( rabbit ) ) return false;
+
+      for (var i=0; i&lt;rabbit.length; i++){
+        if ( !isString( rabbit[i] ) ){
+          return false;
+        }
+      }
+
+      return true;
+    }
+
   })();
 } else if ( undefined ){ // the second load
 
@@ -93,7 +263,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Mar 27 2018 22:11:47 GMT+0300 (MSK)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Mar 28 2018 22:08:00 GMT+0300 (MSK)
 </footer>
 
 <script> prettyPrint(); </script>
