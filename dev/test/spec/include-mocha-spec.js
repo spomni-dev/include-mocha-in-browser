@@ -7,6 +7,7 @@ describe('include-mocha.js', function(){
       saveState : function(){
         this.clean();
         this._saveScriptNodes();
+        this._saveResources();
       },
       clean : function(){
         this._removeScripts();
@@ -27,7 +28,16 @@ describe('include-mocha.js', function(){
       },
       _cleanGlobalVars : function(){
         delete window.mocha;
+      },
+      _saveResources : function(){
+        this.savedResources = getNewResources([]);
       }
+    };
+    
+    function clean(callback){
+      cleaner.saveState();
+      callback();
+      cleaner.clean();
     };
 
     function cleanIt( message, callback ){
@@ -149,9 +159,53 @@ describe('include-mocha.js', function(){
           loadedScriptCounter.addScriptCount();
         });
       }
-    
-    
     };
+    
+    function getNewResources( oldResources ){
+      var allScripts = document.querySelectorAll('script');
+      var allLinks = document.querySelectorAll("link");
+      
+      var newResorces = []
+      
+      for (var i=0; i<allScripts.length; i++){
+        if ( !isInclude( oldResources, allScripts[i] ) ){
+          newResorces.push( allScripts[i] );
+        }
+      };
+      
+      for (var i=0; i<allLinks.length; i++){
+        if ( !isInclude( oldResources, allLinks[i] ) ){
+          newResorces.push( allLinks[i] );
+        }
+      };
+      
+      return newResorces;
+      
+    } //-- getNewResources()
+    
+    function onResourcesLoaded(callback){
+      var resources = getNewResources( cleaner.savedResources );
+      
+      var loadedResource = returnLoadedResources();
+      
+      var counter = {
+        resorcesCount : resources.length,
+        loadedResourcesCount : loadedResources.length,
+        resourceLoaded : function(){
+          loadedResourcesCount++;
+          if ( this.loadedResourcesCount == this.recourcesCount){
+            callback;
+          }
+        }
+      };
+      
+      for (var i=0; i<resources.length; i++){
+        if ( !isInclude( loadedResource, resorces[i] ) ){
+          resources[i].addEventListener( 'load', counter.resourceLoaded );
+          resources[i].addEventListener( 'error', counter.resourceLoaded );
+        };
+      };
+    }; //-- onResourcesLoaded()
 
     function shouldIncludeScript( includeMochaOption, expectedSrc ) {
       var beforeScriptNodes = document.querySelectorAll('script');
@@ -402,6 +456,33 @@ describe('include-mocha.js', function(){
       it( 'Should call the function "window.mocha.setup(\'bdd\')" if the option "option.mochaSetup" is undefined.' );
       
       it( 'Should call the function "window.mocha.setup( option.mochaSetup )" if the option "option.mochaSetup" is defined.' );
+    });
+    
+    describe( 'Should run the module "mocha.js".', function(){
+    
+      it( 'Should call the function "window.mocha.run()".' );
+    
+      it( 'Should put the value returned from "window.mocha.run()" in the property "runner" of the function object "includeMocha".', function(done){
+        clean(function(){
+        
+          var result = includeMocha();
+          assert.isUndefined(result);
+          
+          includeMocha.onComplete(function(){
+            assert
+          });
+          
+          onResourcesLoaded(function(){
+            setTimeout(
+              function(){
+                assert.isDefined( window.includeMocha.runner );
+                console.log( includeMocha.runner instanceof Runner )
+              },
+              20
+            );
+          });
+        });
+      });
     });
 
     

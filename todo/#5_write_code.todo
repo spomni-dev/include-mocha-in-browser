@@ -24,3 +24,6 @@
     ✔ #5.2.2.0 Should call the function "window.mocha.setup('bdd')"  if the option "option.mochaSetup" is undefined. @done
     ✔ #5.2.2.1 Should call the function "window.mocha.setup( option.mochaSetup )" if the option "option.mochaSetup" is defined. @done
   
+  ☐ #5.2.3 Should run the module "mocha.js".
+    ☐ #5.2.3.0 Should call the function "window.mocha.run()".
+    ☐ #5.2.3.0 Should put the value returned from "window.mocha.run()" in the property "runner" of the function object "includeMocha".
