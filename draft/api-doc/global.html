@@ -94,95 +94,17 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
-<h4 class="name" id="includeMocha"><span class="type-signature"></span>includeMocha<span class="type-signature"> :<a href="global.html#IncludeMochaInstance">IncludeMochaInstance</a></span></h4>
-
-
-
-
-<div class="description">
-    Загрузить и настроить тестовое окружение. Запустить выполнение тестов.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="global.html#IncludeMochaInstance">IncludeMochaInstance</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
 
     
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="include-mocha-api.js.html">include-mocha-api.js</a>, <a href="include-mocha-api.js.html#line21">line 21</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-
-    
-
-    
-    <h4 class="name" id="IncludeMochaInstance"><span class="type-signature"></span>IncludeMochaInstance<span class="signature">(option<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined|Error}</span></h4>
+    <h4 class="name" id="includeMocha"><span class="type-signature"></span>includeMocha<span class="signature">(option<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {undefined}</span></h4>
     
 
     
@@ -190,7 +112,7 @@
 
 
 <div class="description">
-    Загрузить и настроить тестовое окружение. Запустить выполнение тестов. Вывести ошибку в тело документа, если невозможно загрузить любой из ресурсов.
+    Загрузить и настроить тестовое окружение. Запустить выполнение тестов. В случе ошибки, сообщить с помощью колбэка "option.onComplete".
 </div>
 
 
@@ -689,6 +611,43 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>onComplete</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#includeMocha_onComplete">includeMocha_onComplete</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Функция обратной связи.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -726,6 +685,32 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>hasError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">null</span>
+|
+
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Флаг наличия ошибки выполнения.</td>
+        </tr>
+
     
 
         <tr>
@@ -823,15 +808,241 @@
     <dd>
         
 <span class="param-type">undefined</span>
-|
-
-<span class="param-type">Error</span>
 
 
     </dd>
 </dl>
 
     
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+
+    
+
+    
+    <h4 class="name" id="includeMocha_onComplete"><span class="type-signature"></span>includeMocha_onComplete<span class="signature">(info)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>info</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>hasError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">флаг наличия ошибки</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">объект ошибки</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="include-mocha-api.js.html">include-mocha-api.js</a>, <a href="include-mocha-api.js.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -857,7 +1068,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Mar 24 2018 03:13:50 GMT+0300 (Иорданское время (зима))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Apr 11 2018 00:32:21 GMT+0300 (MSK)
 </footer>
 
 <script> prettyPrint(); </script>
