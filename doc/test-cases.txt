@@ -1,52 +1,56 @@
 include-mocha.js
 
   Should define the global var "includeMocha".
+  "window.includeMocha.runner" should contain "null".
+  "window.includeMocha.hasError" should contain "null".
 
 includeMocha( option )
 
-  Should return an "Error" object if pass an invalid option.
-    
+  * Should define its own property "hasError" as "false" if the function has been complete correctly.
+
+  Should define its own property "#hasError" as "true" if pass an invalid option. Should call the callback "option.onComplete" and pass an object to it. The passed object should have two properties: "hasError : true" and "error : Error".
+
     option
       Should be a string, a string array, an object or "undefined".
-      
+
     option.specRoot
       Should be a string or "undefined".
-      
+
     option.specPath
       Should be a string, a string array or "undefined".
-  
+
     option.scriptPath
       Should be a string, a string array or "undefined".
-    
+
     option.libRoot
       Should be a string or "undefined".
-      
+
     option.mochaPath
       Should be a string or "undefined".
-      
+
     option.chaiPath
       Should be a string or "undefined".
-      
+
     option.selfPath
       Should be a string or "undefined".
-      
+
     option.cssRoot
       Should be a string or "undefined".
-    
+
     option.cssPath
       Should be a string, a string array or "undefined".
-      
+
   Should include a module "mocha.js".
     Should include a script from the source "'lib/mocha.js'" if the options "option.libRoot" and "option.mochaPath" are undefined.
     Should include a script from the source "'lib/' + option.mochaPath" if the option "option.libRoot" is uneefined and "option.mochaPath" is string.
     Should include a script from the source "option.libRoot + 'mocha.js'" if the option "option.libRoot" is string and "option.mochaPath" is undefined.
     Should include a script from the source "option.libRoot + option.mochaPath" if the options "option.libRoot" and "option.mochaPath" are defined.
     Should define the global var "mocha" as an instanse of the module "mocha.js".
-    
+
   Should setup the module "micha.js".
     Should call the function "window.mocha.setup('bdd')"  if the option "option.mochaSetup" us undefined.
     Should call the function "window.mocha.setup( option.mochaSetup )" if the option "option.mochaSetup" is defined.
-    
+
   Should run the module "mocha.js".
     Should call the function "window.mocha.run()".
     Should put the value returned from "window.mocha.run()" in the property "runner" of the function object "includeMocha".
@@ -66,7 +70,7 @@ includeMocha( option )
     Should include script files from the sources "'spec/' + option.specPath[i]" if the option "option.specRoot" is undefined and "option.specPath" is a string array.
     Should include a script file from the source "option.specRoot + option.specPath" if the option "option.specRoot" is defined and "option.specPath" is string.
     Should include script files from the sources "option.specRoot + option.specPath[i]" if the option "option.specRoot" is defined and "option.specPath" is a string array.
-    
+
   Should include script files for the test
     Should include a script file from the source "option.scriptPath" if the option "option.scriptPath" is string.
     Should include script files from the sources "option.scriptPath[i]" if the option "option.scriptPath" is a string array.
@@ -77,22 +81,22 @@ includeMocha( option )
     Should include a script file from the source "option.libRoot + 'chai.js'" if the option "option.libRoot" is defined and "option.chaiPath" is undefined.
     Should include a script file from the source "option.libRoot + option.chaiPath" if the options "option.libRoot" and "option.chaiPath" are defined.
     Should define the global variable "chsi" as an instance of the module "chai.js".
-  
+
   Should include a current script file
     Should include a script file from the source "'lib/include-mocha.js'" if the options "option.libRoot" and "option.selfPath" are undefined.
     Should include a script file from the source "'lib/' + option.selfPath" if the option "option.libRoot" is undefined and "option.selfPath" is defined.
     Should include a script file from the source "option.libRoot + 'include-mocha.js'" if the option "option.libRoot" is defined and "option.selfPath" is undefined.
     Should include a script file from the source "option.libRoot + option.selfPath" if the options "option.libRoot" and "option.selfPath" are defined.
 
-  Should write an error message in the tag "<div id='mocha'>" and stop this script if any resource file don't loaded.
+  Should define its own property "#hasError" as "true", if any resource file don't loaded. Should call the callback "option.onComplete" and pass an object to it. The passed object should have two properties: "hasError : true" and "error : Error".
     The test specification files.
     The script files for the testing.
     The file of the module "mocha.js".
     The file of the module "chai.js".
     The file of this script.
     The style files.
-  
+
   Should add in the document the tag "<div id='mocha'>" if it has been not loaded.
   Should not add in the document the tag "<div id='mocha'>" if it has been loaded.
-  
+
   Should work on the browser that do not support the attribute "async" of the tag "script".

@@ -1,52 +1,56 @@
 include-mocha.js
 
-  Скрипт должен экспортировать функцию includeMocha в глобальную область видимости.
+  Должен определять глобальную переменную "includeMocha".
+  "window.includeMocha.runner" должен содержать "null".
+  "window.includeMocha.hasError" должен содержать "null".
 
 includeMocha( option )
 
-  Должна вернуть объект класса "Error", если передан не валидный параметр.
-    
+  * Должна устанавливать собственное свойство "hasError" как "false" во всех случаях корректного завершения работы.
+
+  Должна определить собственное свойство «#hasError» как «true», если передан недопустимый параметр. Должна вызвать колбэк «option.onComplete» и передать ему объект. Переданный объект должен иметь два свойства: «hasError : true» и «error : Error».
+
     option
       Должен быть строкой, массивом строк, объектом или "undefined".
-      
+
     option.specRoot
       Должен быть строкой или "undefined".
-      
+
     option.specPath
       Должен быть строкой, массивом строк или "undefined".
-  
+
     option.scriptPath
       Должен быть строкой, массивом строк или "undefined".
-    
+
     option.libRoot
       Должен быть строкой или "undefined".
-      
+
     option.mochaPath
       Должен быть строкой или "undefined".
-      
+
     option.chaiPath
       Должен быть строкой или "undefined".
-      
+
     option.selfPath
       Должен быть строкой или "undefined".
-      
+
     option.cssRoot
       Должен быть строкой или "undefined".
-    
+
     option.cssPath
       Должен быть строкой, массивом строк или "undefined".
-      
-  Должна подключать модуль "mocha.js". 
+
+  Должна подключать модуль "mocha.js".
     Должна подключать скрипт по адресу "'lib/mocha.js'", если не переданы параметры "option.libRoot" и "option.mochaPath".
     Должна подключать скрипт по адресу "'lib/' + option.mochaPath", если не передан параметр "option.libRoot" и "option.mochaPath" является строкой.
     Должна подключать скрипт по адресу "option.libRoot + 'mocha.js'", если передан параметр "option.libRoot" и параметр "option.mochaPath" не определен.
     Должна подключать скрипт по адресу "option.libRoot + option.mochaPath", если переданы параметры "option.libRoot" и "option.mochaPath".
     Должна определять переменную "window.mocha" как экземпляр модуля "mocha.js".
-    
+
   Должна настраивать модуль "mocha.js".
     Должна запускать функцию "window.mocha.setup('bdd')", если параметр "option.mochaSetup" не определен.
     Должна запускать функцию "window.mocha.setup( option.mochaSetup )", если передан параметр "option.mochaSetup".
-    
+
   Должна запускать модуль "mocha.js".
     Должна запускать функцию "window.mocha.run()".
     Должна помещать значение, возвращенное функцией "window.mocha.run()", в свойство "runner" объекта функции "includeMocha".
@@ -58,7 +62,7 @@ includeMocha( option )
     Должна подключать файл стилей по адресу "option.cssRoot + 'mocha.css'", если передан параметр "option.cssRoot" и параметр "option.cssPath" не определен.
     Должна подключать файл стилей по адресу "option.cssRoot + option.cssPath", если передан параметр "option.cssRoot" и параметр "option.cssPath" является строкой.
     Должна подключать файлы стилей с адресами "option.cssRoot + option.cssPath[i]", если передан параметр "option.cssRoot" и параметр "option.cssPath" является массивом строк.
-  
+
   Должна подключать файлы спецификаций тестов.
     Должна подключать файл скрипта по адресу "'spec/'+option", если параметр "option" является строкой.
     Должна подключать файлы скриптов с адресами "'spec/'+option[i]", если параметр "option" является массивом.
@@ -66,7 +70,7 @@ includeMocha( option )
     Должна подключать файлы скриптов с адресами "'spec/' + option.specPath[i]", если не передан параметр "option.specRoot" и "option.specPath" является массивом строк.
     Должна подключать файл скрипта по адресу "option.specRoot + option.specPath", если передан параметр "option.specRoot" и "option.specPath" является строкой.
     Должна подключать файлы скриптов с адресами "option.specRoot + option.specPath[i]", если передан параметр "option.specRoot" и "option.specPath" является массивом строк.
-    
+
   Должна загружать файлы тестируемых js-скриптов.
     Должна подключать файл по адресу "option.scriptPath", если параметр "option.scriptPath" является строкой.
     Должна подключать файлы с адресами "option.scriptPath[i]", если параметр "option.scriptPath" является массивом строк.
@@ -77,22 +81,22 @@ includeMocha( option )
     Должна подключать файл скрипта по адресу "option.libRoot + 'chai.js'", если переданы параметр "option.libRoot" и "option.chaiPath" не определен.
     Должна подключать файл скрипта по адресу "option.libRoot + option.chaiPath", если переданы параметры "option.libRoot" и "option.chaiPath".
     Должна определять переменную "window.chai" как экземпляр модуля "chai.js".
-  
+
   Должна подключать файл данного скрипта
     Должна подключать файл данного скрипта по адресу "'lib/include-mocha.js'", если не переданы параметры "option.libRoot" и "option.selfPath".
     Должна подключать файл данного скрипта по адресу "'lib/' + option.selfPath", если не передан параметр "option.libRoot" и "option.selfPath" является строкой.
     Должна подключать файл данного скрипта по адресу "option.libRoot + 'include-mocha.js'", если передан параметр "option.libRoot" и "option.selfPath" не определен.
     Должна подключать файл данного скрипта по адресу "option.libRoot + option.selfPath", если переданы параметры "option.libRoot" и "option.selfPath".
-  
-  Должна вывести в тег "<div id='mocha'>" сообщение об ошибке и остановить работу, если не удалось загрузить любой из файлов ресурсов.
+
+  Должна определить собственное свойство "#hasError" как "true", если не удалось загрузить любой из файлов ресурсов. Должна вызвать колбэк «option.onComplete» и передать ему объект. Переданный объект должен иметь два свойства: «hasError : true» и «error : Error».
     Файлы спецификаций тестов.
     Файлы тестируемых скриптов.
     Файл модуля "mocha.js".
     Файл модуля "chai.js".
     Файл данного скрипта.
     Файлы стилей.
-  
+
   Должна добавлять в тело документа тег "<div id='mocha'>", если он не был добавлен ранее.
   Не должна добавлять в тело документа тег "<div id='mocha'>", если он был добавлен ранее.
-  
+
   Должна корректно работать в браузерах, не поддерживающих атрибут async тега script.
