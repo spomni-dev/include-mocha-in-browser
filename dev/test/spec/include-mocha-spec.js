@@ -1,83 +1,100 @@
-describe('include-mocha.js', function(){
+(function(){
 
-  //-- Support vars and functions
-    var assert = testAssert;
+  var assert = testAssert;
 
-    var cleaner = {
-      saveState : function(){
-        this.clean();
-        this._saveScriptNodes();
-        this._saveResources();
-      },
-      clean : function(){
-        this._removeScripts();
-        this._cleanGlobalVars()
-      },
-      _scriptNodeList : null,
-      _saveScriptNodes : function(){
-        this._scriptNodeList = document.querySelectorAll('script')
-      },
-      _removeScripts : function(){
-        var scriptNodes = document.querySelectorAll('script');
-        for (var i=0; i<scriptNodes; i++){
-          if ( !isInclude(this._scriptNodeList, scriptNodes[i]) ){
-            scriptNodes[i].parent.removeChild(scriptNodes[i]);
-            i--;
-          }
-        };
-      },
-      _cleanGlobalVars : function(){
-        delete window.mocha;
-      },
-      _saveResources : function(){
-        this.savedResources = getNewResources([]);
+  function clean(callback){
+    cleaner.clean();
+    cleaner.saveState();
+    callback();
+    cleaner.clean();
+  };
+  
+  var cleaner = {
+    saveState : function(){
+      this._saveScriptNodes();
+      this._saveResources();
+    },
+    clean : function(){
+      this._removeScripts();
+      this._cleanGlobalVars()
+    },
+    _scriptNodeList : null,
+    _saveScriptNodes : function(){
+      this._scriptNodeList = document.querySelectorAll('script')
+    },
+    _removeScripts : function(){
+      var scriptNodes = document.querySelectorAll('script');
+      for (var i=0; i<scriptNodes; i++){
+        if ( !isInclude(this._scriptNodeList, scriptNodes[i]) ){
+          scriptNodes[i].parent.removeChild(scriptNodes[i]);
+          i--;
+        }
+      };
+    },
+    _cleanGlobalVars : function(){
+      delete window.mocha;
+    },
+    _saveResources : function(){
+      this.savedResources = getNewResources([]);
+    }
+  };
+  
+  function getNewResources( oldResources ){
+    var allScripts = document.querySelectorAll('script');
+    var allLinks = document.querySelectorAll("link");
+    
+    var newResorces = []
+    
+    for (var i=0; i<allScripts.length; i++){
+      if ( !isInclude( oldResources, allScripts[i] ) ){
+        newResorces.push( allScripts[i] );
       }
     };
     
-    function clean(callback){
-      cleaner.saveState();
-      callback();
-      cleaner.clean();
+    for (var i=0; i<allLinks.length; i++){
+      if ( !isInclude( oldResources, allLinks[i] ) ){
+        newResorces.push( allLinks[i] );
+      }
     };
-
-    function cleanIt( message, callback ){
-      cleaner.saveState();
-      it( message, callback );
-      cleaner.clean();
+    
+    return newResorces;
+    
+  }; //-- getNewResources()
+  
+  function forEachType( callback ){
+  
+    var typeArr = [
+      1,
+      "string",
+      null,
+      undefined,
+      ["", 1, null],
+      ['string', 'string'],
+      {}
+    ];
+  
+    var res = function(){
+      typeArr.forEach(function(type, i, typeArr){
+        callback( type );
+      });
     };
-
-    function forEachType( callback ){
-
-      var typeArr = [
-        1,
-        "string",
-        null,
-        undefined,
-        ["", 1, null],
-        ['string', 'string'],
-        {}
-      ];
-
-      var res = function(){
-        typeArr.forEach(function(type, i, typeArr){
-          callback( type );
-        });
-      };
-
-      return res;
-    };
-
-    function isString( rabbit ){
+  
+    return res;
+  };
+  
+  var is = {
+  
+    string : function( rabbit ){
       if ( typeof( rabbit ) !== "string" ) return false;
       return true;
-    };
-
-    function isArray( rabbit ){
+    },
+  
+    array : function( rabbit ){
       if ( rabbit instanceof Array ) return true;
       return false;
-    };
-
-    function isSimpleObject( rabbit ){
+    },
+  
+    simpleObject : function( rabbit ){
       if ( typeof( rabbit ) === "object"
         && rabbit !== null
         && rabbit.__proto__ == Object.prototype
@@ -85,151 +102,61 @@ describe('include-mocha.js', function(){
         return true;
       };
       return false;
-    };
-
-    function isUndefined( rabbit ){
+    },
+  
+    undefined : function( rabbit ){
       if ( rabbit === undefined ) return true;
       return false;
-    };
-
-    function isStringArray( rabbit ) {
+    },
+  
+    stringArray : function( rabbit ) {
       if ( !isArray( rabbit ) ) return false;
-
+  
       for (var i=0; i<rabbit.length; i++){
         if ( !isString( rabbit[i] ) ){
           return false;
         }
       }
-
+  
       return true;
-    }
-
-    function isInclude( haystack, needle ){
+    },
+  
+    include : function( haystack, needle ){
       if ( !haystack.length ) return false;
       for (var i=0; i<haystack.length; i++){
         if ( haystack[i] === needle ) return true;
       }
       return false;
     }
+  };
 
-    function getNewScriptNodes( oldScriptNodes ) {
-      var afterScriptNodes = document.querySelectorAll('script');
 
-      var newScriptNodes = [];
-      for (var i=0; i<afterScriptNodes.length; i++){
-        if ( !isInclude( oldScriptNodes, afterScriptNodes[i] ) ){
-          newScriptNodes.push( afterScriptNodes[i] );
-        }
-      }
+describe('includeMocha', function(){
 
-      return newScriptNodes;
-    }
-
-    function getNewSRCArray( oldScriptNodes ){
-      var newScriptNodes = document.querySelectorAll('script');
-
-      var newSRCArray = [];
-      for (var i=0; i<newScriptNodes.length; i++){
-        if ( !isInclude( oldScriptNodes, newScriptNodes[i] ) ){
-          newSRCArray.push( newScriptNodes[i].getAttribute('src') );
-        }
-      }
-
-      return newSRCArray;
-    }
-    
-    function onScriptsLoaded( newScriptNodes, callback ){
-    
-      var loadedScriptCounter = {
-        _scriptCount : newScriptNodes.length,
-        _loadedScriptCount : 0,
-        addScriptCount : function(){
-          this._loadedScriptCount++;
-          if (this._loadedScriptCount == this._scriptCount){
-            callback();
-          }
-        }
-      }
-      
-      for (var i=0; i<newScriptNodes.length; i++){
-        newScriptNodes[i].addEventListener('load', function(){
-          loadedScriptCounter.addScriptCount();
-        });
-        newScriptNodes[i].addEventListener('error', function(){
-          loadedScriptCounter.addScriptCount();
-        });
-      }
-    };
-    
-    function getNewResources( oldResources ){
-      var allScripts = document.querySelectorAll('script');
-      var allLinks = document.querySelectorAll("link");
-      
-      var newResorces = []
-      
-      for (var i=0; i<allScripts.length; i++){
-        if ( !isInclude( oldResources, allScripts[i] ) ){
-          newResorces.push( allScripts[i] );
-        }
-      };
-      
-      for (var i=0; i<allLinks.length; i++){
-        if ( !isInclude( oldResources, allLinks[i] ) ){
-          newResorces.push( allLinks[i] );
-        }
-      };
-      
-      return newResorces;
-      
-    } //-- getNewResources()
-    
-    function onResourcesLoaded(callback){
-      var resources = getNewResources( cleaner.savedResources );
-      
-      var loadedResource = returnLoadedResources();
-      
-      var counter = {
-        resorcesCount : resources.length,
-        loadedResourcesCount : loadedResources.length,
-        resourceLoaded : function(){
-          loadedResourcesCount++;
-          if ( this.loadedResourcesCount == this.recourcesCount){
-            callback;
-          }
-        }
-      };
-      
-      for (var i=0; i<resources.length; i++){
-        if ( !isInclude( loadedResource, resorces[i] ) ){
-          resources[i].addEventListener( 'load', counter.resourceLoaded );
-          resources[i].addEventListener( 'error', counter.resourceLoaded );
-        };
-      };
-    }; //-- onResourcesLoaded()
-
-    function shouldIncludeScript( includeMochaOption, expectedSrc ) {
-      var beforeScriptNodes = document.querySelectorAll('script');
-
-      var result = includeMocha( includeMochaOption );
-      assert.isUndefined(result);
-
-      var newSRCArray = getNewSRCArray(beforeScriptNodes);
-      var validSrcCount = 0;
-
-      newSRCArray.forEach(function(src, i, newSRCArray){
-        if ( src === expectedSrc ){
-          validSrcCount++;
-        }
-      });
-
-      assert.strictEqual( validSrcCount, 1, "The expected count of the new valid script nodes is 1.");
-    }
-
-  //--
-
-  cleanIt( 'Should define the global var "includeMocha".', function(){
+  it( 'Should define the global var "includeMocha".', function(){
     assert.isDefined(includeMocha);
   });
+  
+  it( '"window.includeMocha.runner" should contain "null".', function(){
+    assert.isNull( window.includeMocha.runner );
+  });
+
+  it( '"window.includeMocha.hasError" should contain "null".', function(){
+    assert.isNull( window.includeMocha.hasError );
+  });
+
+
+});
+
+})();
+
+describe("---------------- old version ---------------", function(){
+      it("------------------------------------------------------------------------");
+});
+
+
+describe('include-mocha.js', function(){
+
 
   describe( 'includeMocha( option )', function(){
 

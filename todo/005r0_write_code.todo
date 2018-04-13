@@ -1,0 +1,7 @@
+✔ 5r0.0 includeMocha @done
+
+  ✔ 5r0.0.0 Should define the global var "includeMocha". @done
+  ✔ 5r0.0.0 "window.includeMocha.runner" should contain "null". @done
+  ✔ 5r0.0.0 "window.includeMocha.hasError" should contain "null". @done
+  
+☐ 5r0.1 includeMocha( option )
